@@ -9,7 +9,7 @@ steps:
       - '-c'
       - >-
         docker login ghcr.io --username=bds1959
-        --password=44ca9a6db56ca6b7cc3ef3eb3f9b5b1edd4a4c52
+        --password=
     entrypoint: bash
   - name: gcr.io/cloud-builders/docker
     args:
