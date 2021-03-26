@@ -1,0 +1,30 @@
+steps:
+  - name: 'maven:3-jdk-8'
+    args:
+      - package
+      - '-Dmaven.test.skip=true'
+    entrypoint: mvn
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - '-c'
+      - >-
+        docker login ghcr.io --username=bds1959
+        --password=44ca9a6db56ca6b7cc3ef3eb3f9b5b1edd4a4c52
+    entrypoint: bash
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - '-c'
+      - 'docker build -t ghcr.io/bds1959/gameoflife:latest .'
+    entrypoint: bash
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - '-c'
+      - 'docker push ghcr.io/bds1959/gameoflife:latest'
+    entrypoint: bash
+  - name: gcr.io/cloud-builders/gke-deploy
+    args:
+      - run
+      - '--filename=k8s/'
+      - '--image=ghcr.io/bds1959/gameoflife:latest'
+      - '--location=us-central1'
+      - '--cluster=devops-autopilot-cluster'
